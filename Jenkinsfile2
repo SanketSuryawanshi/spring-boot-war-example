@@ -1,0 +1,57 @@
+node {
+    def mavenHome = tool 'Maven'
+    
+    stage('MAVEN-TEST') {
+        bat "${mavenHome}/bin/mvn test"
+        echo 'Maven Testing !!'
+    }
+
+    stage('MAVEN-BUILD') {
+        bat "${mavenHome}/bin/mvn package"
+        echo 'Maven Building'
+    }
+
+    stage('DEPLOY-ON-TEST') {
+        steps {
+            script {
+                def deployParams = [
+                    adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.151.69:8080/')],
+                    contextPath: '/app2',
+                    war: '**/*.war'
+                ]
+                deploy deployParams
+            }
+            echo 'Maven Deploy On Test'
+        }
+    }
+
+    stage("DEPLOY-ON-PROD") {
+        input {
+            message "Should we continue?"
+            ok "Yes we Should"
+        }
+
+        steps {
+            script {
+                def deployParams = [
+                    adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.151.69:8080')],
+                    contextPath: '/app3',
+                    war: '**/*.war'
+                ]
+                deploy deployParams
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "============= ALWAYS =============="
+        }
+        success {
+            echo "Pipeline Executed Successfully !!"
+        }
+        failure {
+            echo "Pipeline Failed Something Went Wrong !!"
+        }
+    }
+}
