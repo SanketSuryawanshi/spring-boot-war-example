@@ -1,46 +1,27 @@
 node {
-    def mavenHome = tool 'Maven'
-    
     stage('MAVEN-TEST') {
+        // Use Maven tool configured in Jenkins
+        def mavenHome = tool 'Maven'
         sh "${mavenHome}/bin/mvn test"
         echo 'Maven Testing !!'
     }
 
     stage('MAVEN-BUILD') {
+        def mavenHome = tool 'Maven'
         sh "${mavenHome}/bin/mvn package"
         echo 'Maven Building'
     }
 
     stage('DEPLOY-ON-TEST') {
-        steps {
-            script {
-                def deployParams = [
-                    adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')],
-                    contextPath: '/app2',
-                    war: '**/*.war'
-                ]
-                deploy deployParams
-            }
-            echo 'Maven Deploy On Test'
-        }
+        def mavenHome = tool 'Maven'
+        deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')], contextPath: '/app2', war: '**/*.war'
+        echo 'Maven Deploy On Test'
     }
 
     stage("DEPLOY-ON-PROD") {
-        input {
-            message "Should we continue?"
-            ok "Yes we Should"
-        }
-
-        steps {
-            script {
-                def deployParams = [
-                    adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')],
-                    contextPath: '/app3',
-                    war: '**/*.war'
-                ]
-                deploy deployParams
-            }
-        }
+        def mavenHome = tool 'Maven'
+        input(message: "Should we continue?", ok: "Yes we Should")
+        deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')], contextPath: '/app3', war: '**/*.war'
     }
 
     post {
