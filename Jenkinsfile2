@@ -1,41 +1,37 @@
 node {
-    stage('Checkout') {
-        checkout scm
-    }
-
-    stage('MAVEN-TEST') {
-        def mavenHome = tool 'Maven'
-        sh "${mavenHome}/bin/mvn test"
-        echo 'Maven Testing !!'
-    }
-
-    stage('MAVEN-BUILD') {
-        def mavenHome = tool 'Maven'
-        sh "${mavenHome}/bin/mvn package"
-        echo 'Maven Building'
-    }
-
-    stage('DEPLOY-ON-TEST') {
-        def mavenHome = tool 'Maven'
-        deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')], contextPath: '/app2', war: '**/*.war'
-        echo 'Maven Deploy On Test'
-    }
-
-    stage("DEPLOY-ON-PROD") {
-        def mavenHome = tool 'Maven'
-        input(message: "Should we continue?", ok: "Yes we Should")
-        deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')], contextPath: '/app3', war: '**/*.war'
-    }
-
-    post {
-        always {
-            echo "============= ALWAYS =============="
+    try{
+        stage('Checkout') {
+            checkout scm
         }
-        success {
-            echo "Pipeline Executed Successfully !!"
+    
+        stage('MAVEN-TEST') {
+            def mavenHome = tool 'Maven'
+            sh "${mavenHome}/bin/mvn test"
+            echo 'Maven Testing !!'
         }
-        failure {
-            echo "Pipeline Failed Something Went Wrong !!"
+    
+        stage('MAVEN-BUILD') {
+            def mavenHome = tool 'Maven'
+            sh "${mavenHome}/bin/mvn package"
+            echo 'Maven Building'
         }
+    
+        stage('DEPLOY-ON-TEST') {
+            def mavenHome = tool 'Maven'
+            deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')], contextPath: '/app2', war: '**/*.war'
+            echo 'Maven Deploy On Test'
+        }
+    
+        stage("DEPLOY-ON-PROD") {
+            def mavenHome = tool 'Maven'
+            input(message: "Should we continue?", ok: "Yes we Should")
+            deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')], contextPath: '/app3', war: '**/*.war'
+        }
+    }catch (Exception e) {
+        echo "Pipeline Failed Something Went Wrong !!"
+        currentBuild.result = 'FAILURE'
+        // Add additional actions or notifications on failure if needed
+    } finally {
+        echo "============= FINALLY SECTION =============="
     }
 }
