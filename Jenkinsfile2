@@ -15,7 +15,7 @@ node {
         steps {
             script {
                 def deployParams = [
-                    adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.151.69:8080/')],
+                    adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')],
                     contextPath: '/app2',
                     war: '**/*.war'
                 ]
@@ -34,7 +34,7 @@ node {
         steps {
             script {
                 def deployParams = [
-                    adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.151.69:8080')],
+                    adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')],
                     contextPath: '/app3',
                     war: '**/*.war'
                 ]
