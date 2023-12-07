@@ -1,4 +1,4 @@
-node {
+node('Java-build-node') {
     try{
         stage('Checkout') {
             checkout scm
