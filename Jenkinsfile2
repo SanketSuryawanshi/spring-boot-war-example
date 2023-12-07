@@ -18,14 +18,14 @@ node {
     
         stage('DEPLOY-ON-TEST') {
             def mavenHome = tool 'Maven'
-            deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')], contextPath: '/app2', war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.102.113:8080/')], contextPath: '/app2', war: '**/*.war'
             echo 'Maven Deploy On Test'
         }
     
         stage("DEPLOY-ON-PROD") {
             def mavenHome = tool 'Maven'
             input(message: "Should we continue?", ok: "Yes we Should")
-            deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://52.90.73.5:8080/')], contextPath: '/app3', war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.102.113:8080/')], contextPath: '/app3', war: '**/*.war'
         }
     }catch (Exception e) {
         echo "Pipeline Failed Something Went Wrong !!"
