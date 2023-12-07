@@ -7,13 +7,13 @@ pipeline {
     stages {
         stage('MAVEN-TEST') {
             steps {
-                bat 'mvn test'
+                sh 'mvn test'
                 echo 'Maven Testing !!'
             }
         }
         stage('MAVEN-BUILD') {
             steps {
-                bat 'mvn package'
+                sh 'mvn package'
                 echo 'Maven Building'
             }
         }
