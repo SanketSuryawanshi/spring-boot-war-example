@@ -2,12 +2,12 @@ node {
     def mavenHome = tool 'Maven'
     
     stage('MAVEN-TEST') {
-        bat "${mavenHome}/bin/mvn test"
+        sh "${mavenHome}/bin/mvn test"
         echo 'Maven Testing !!'
     }
 
     stage('MAVEN-BUILD') {
-        bat "${mavenHome}/bin/mvn package"
+        sh "${mavenHome}/bin/mvn package"
         echo 'Maven Building'
     }
 
