@@ -1,6 +1,9 @@
 node {
+    stage('Checkout') {
+        checkout scm
+    }
+
     stage('MAVEN-TEST') {
-        // Use Maven tool configured in Jenkins
         def mavenHome = tool 'Maven'
         sh "${mavenHome}/bin/mvn test"
         echo 'Maven Testing !!'
