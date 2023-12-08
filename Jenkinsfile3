@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'Java-build-node' }
+    agent any
     tools{
         maven 'Maven'
     }
@@ -24,7 +24,7 @@ pipeline {
         }
         stage('DEPLOY-ON-TEST') {
             steps {
-                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.102.113:8080/')], contextPath: '/app2', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.102.113:8080/')], contextPath: '/app4', war: '**/*.war'
                 echo 'Maven Deploy On Test'
             }
         }
@@ -35,7 +35,7 @@ pipeline {
             }
             
             steps{
-                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.102.113:8080/')], contextPath: '/app3', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.102.113:8080/')], contextPath: '/app5', war: '**/*.war'
             }
         }
     }
