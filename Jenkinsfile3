@@ -19,7 +19,7 @@ pipeline {
         }
         stage('DEPENDENCY-CHECK'){
           steps{
-            dependencyCheck additionalArguments: '--format HTML', odclnstallation: 'DP-Check'
+            dependencyCheck additionalArguments: '--format HTML', odcInstallation: 'DP-Check'
           }
         }
         stage('DEPLOY-ON-TEST') {
