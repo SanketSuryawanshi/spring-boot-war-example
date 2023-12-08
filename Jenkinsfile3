@@ -1,0 +1,53 @@
+pipeline {
+    agent { label 'Java-build-node' }
+    tools{
+        maven 'Maven'
+    }
+
+    stages {
+        stage('MAVEN-TEST') {
+            steps {
+                sh 'mvn test'
+                echo 'Maven Testing !!'
+            }
+        }
+        stage('MAVEN-BUILD') {
+            steps {
+                sh 'mvn package'
+                echo 'Maven Building'
+            }
+        }
+        stage('DEPENDENCY-CHECK'){
+          steps{
+            dependencyCheck additionalArguments: '--format HTML', odclnstallation: 'DP-Check'
+          }
+        }
+        stage('DEPLOY-ON-TEST') {
+            steps {
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.102.113:8080/')], contextPath: '/app2', war: '**/*.war'
+                echo 'Maven Deploy On Test'
+            }
+        }
+        stage("DEPLOY-ON-PROD"){
+             input {
+                message "Should we continue?"
+                ok "Yes we Should"
+            }
+            
+            steps{
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.102.113:8080/')], contextPath: '/app3', war: '**/*.war'
+            }
+        }
+    }
+    post{
+        always{
+            echo "============= ALWAYS =============="
+        }
+        success{
+            echo "Pipeline Executed Succesfully !!"
+        }
+        failure{
+            echo "Pipeline Failed Something Went Wrong !!"
+        }
+    }
+}
