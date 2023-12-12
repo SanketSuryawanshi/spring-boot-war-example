@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'Java-build-node' }
+    agent any
     tools{
         maven 'Maven'
     }
