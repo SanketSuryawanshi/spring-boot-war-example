@@ -19,7 +19,7 @@ pipeline {
         }
         stage('DEPLOY-ON-TEST') {
             steps {
-                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.23.7:8080/')], contextPath: '/app2', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://3.87.126.181:8080/')], contextPath: '/app2', war: '**/*.war'
                 echo 'Maven Deploy On Test'
             }
         }
@@ -30,7 +30,7 @@ pipeline {
             }
             
             steps{
-                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://34.229.23.7:8080/')], contextPath: '/app3', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9-cred', path: '', url: 'http://3.87.126.181:8080/')], contextPath: '/app3', war: '**/*.war'
             }
         }
     }
